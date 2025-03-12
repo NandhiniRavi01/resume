@@ -7,11 +7,11 @@ FROM node:16
 WORKDIR /app
 
 # Copy the package.json and install dependencies
-COPY frontend/package.json frontend/package-lock.json ./
+COPY Frontend/package.json Frontend/package-lock.json ./
 RUN npm install
 
 # Copy the rest of the frontend code
-COPY frontend/ ./
+COPY Frontend/ ./
 
 # Build the React app
 RUN npm run build
