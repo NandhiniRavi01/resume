@@ -33,7 +33,7 @@ pipeline {
                 script {
                     // Build Docker image for the frontend (React app)
                     echo 'Building Docker image for the frontend...'
-                    sh 'docker build -t ${DOCKER_IMAGE_FRONTEND} -f DockerfileJenkins .'
+                    sh 'docker build -t ${DOCKER_IMAGE_FRONTEND} -f Dockerfile .'
 
                     // Build Docker image for the backend app (app.py)
                     echo 'Building Docker image for the backend app...'
