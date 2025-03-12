@@ -73,10 +73,11 @@ pipeline {
                 script {
                     // Example test for the backend API apps
                     echo 'Running backend tests...'
+                    sh 'curl --fail http://localhost:5001 || exit 1'
                     // Test the app service (running on port 5000)
                     sh 'curl --fail http://localhost:5000 || exit 1'
                     // Test the server service (running on port 5001)
-                    sh 'curl --fail http://localhost:5001 || exit 1'
+                    
                 }
             }
         }
