@@ -7,6 +7,7 @@ pipeline {
         DOCKER_IMAGE_FRONTEND = 'my-react-app'
         DOCKER_IMAGE_BACKEND_APP = 'my-python-api-app'
         DOCKER_IMAGE_BACKEND_SERVER = 'my-python-api-server'
+        PATH = "/usr/local/bin:${env.PATH}"
     }
 
     stages {
