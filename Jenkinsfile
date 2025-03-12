@@ -17,6 +17,17 @@ pipeline {
             }
         }
 
+        stage('Test Docker') {
+            steps {
+                script {
+                    // Check if Docker is installed and running
+                    echo 'Checking Docker version and running containers...'
+                    sh 'docker --version'  // Get Docker version
+                    sh 'docker ps'         // List running containers
+                }
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 script {
@@ -88,4 +99,3 @@ pipeline {
         }
     }
 }
-
