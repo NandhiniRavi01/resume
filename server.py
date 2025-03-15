@@ -11,11 +11,12 @@ jwt = JWTManager(app)
 
 # Database Connection
 db = mysql.connector.connect(
-    host="localhost",
-    user="root",           # Default XAMPP user
-    password="nandhu01",           # Leave empty if no password is set
-    database="resume_analyzer"
+    host=os.getenv("MYSQL_HOST", "mysql"),  # Use "mysql" for Docker
+    user=os.getenv("MYSQL_USER", "root"),
+    password=os.getenv("MYSQL_PASSWORD", "nandhu01"),
+    database=os.getenv("MYSQL_DB", "resume_analyzer")
 )
+
 cursor = db.cursor()
 
 # Signup Route
