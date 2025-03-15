@@ -7,6 +7,7 @@ pipeline {
         DOCKER_IMAGE_FRONTEND = 'my-react-app'
         DOCKER_IMAGE_BACKEND_APP = 'my-python-api-app'
         DOCKER_IMAGE_BACKEND_SERVER = 'my-python-api-server'
+        DOCKER_IMAGE_MYSQL = 'my-mysql-db'
         PATH = "/usr/local/bin:${env.PATH}"
     }
 
@@ -43,6 +44,10 @@ pipeline {
                     // Build Docker image for the backend server (server.py)
                     echo 'Building Docker image for the backend server...'
                     sh 'docker build -t ${DOCKER_IMAGE_BACKEND_SERVER} -f Dockerfile.server .'
+
+                    // Build Docker image for MySQL
+                    echo 'Building Docker image for MySQL...'
+                    sh 'docker build -t ${DOCKER_IMAGE_MYSQL} -f Dockerfile.mysql .'
                 }
             }
         }
@@ -74,18 +79,17 @@ pipeline {
                     // Example test for the backend API apps
                     echo 'Running backend tests...'
                     sh 'curl --fail http://localhost:5001/signup || exit 1'
-                     sh 'curl --fail http://localhost:5001/login || exit 1'
+                    sh 'curl --fail http://localhost:5001/login || exit 1'
                     sh 'curl --fail http://localhost:5001/protected || exit 1'
                     // Test the app service (running on port 5000)
                     sh 'curl --fail http://localhost:5000/download/<filename> || exit 1'
-                     sh 'curl --fail http://localhost:5000/upload || exit 1'
+                    sh 'curl --fail http://localhost:5000/upload || exit 1'
                     sh 'curl --fail http://localhost:5000 || exit 1'
                     // Test the server service (running on port 5001)
                     
                 }
             }
         }
-
 
         stage('Clean Up') {
             steps {
