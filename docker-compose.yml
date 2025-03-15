@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+
+mysql:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: nandhu01
+      MYSQL_DATABASE: resume_analyzer
+    ports:
+      - "3306:3306"
+    networks:
+      - backend_network
   # Backend 1 for app.py
   backend1:
     build:
@@ -18,9 +30,15 @@ services:
       dockerfile: Dockerfile.server
     ports:
       - "5001:5001"
+     depends_on:
+      - mysql
+    environment:
+      - MYSQL_HOST=mysql
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=nandhu01
+      - MYSQL_DB=resume_analyzer
     networks:
       - backend_network
-
   # Frontend (React)
   frontend:
     build:
@@ -37,4 +55,3 @@ networks:
     driver: bridge
   frontend_network:
     driver: bridge
-
