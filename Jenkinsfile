@@ -77,9 +77,10 @@ pipeline {
             steps {
                 script {
                     // Example test for the backend API apps
+                    sh 'curl --fail http://localhost:5000 || exit 1'
                     sh 'curl --fail http://localhost:5000/download/<filename> || exit 1'
                     sh 'curl --fail http://localhost:5000/upload || exit 1'
-                    sh 'curl --fail http://localhost:5000 || exit 1'
+                    
                     echo 'Running backend tests...'
                     sh 'curl --fail http://localhost:5001/signup || exit 1'
                     sh 'curl --fail http://localhost:5001/login || exit 1'
