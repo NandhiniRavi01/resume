@@ -1,18 +1,18 @@
-# Use Python official image
+# Dockerfile for app.py (Backend 1)
+
 FROM python:3.9-slim
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirments.txt .
-RUN pip install -r requirments.txt
-
-# Copy the application code
+# Copy the backend code for app.py
 COPY . .
 
-# Expose the port that the backend will run on
+# Install dependencies
+RUN pip install --no-cache-dir -r requirments.txt
+
+# Expose port for app.py
 EXPOSE 5000
 
-# Command to run the backend app with gunicorn to keep it running
-CMD ["gunicorn", "-b", "0.0.0.0:5000", "app:app"]
+# Run app.py
+CMD ["python", "app.py"]
