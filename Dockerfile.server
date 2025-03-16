@@ -1,18 +1,18 @@
-# Use Python official image
+# Dockerfile for server.py (Backend 2)
+
 FROM python:3.9-slim
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY requirments.txt .
-RUN pip install -r requirments.txt
-
-# Copy application code
+# Copy the backend code for server.py
 COPY . .
 
-# Expose the port that the server will run on
+# Install dependencies
+RUN pip install --no-cache-dir -r requirments.txt
+
+# Expose port for server.py
 EXPOSE 5001
 
-# Command to run the backend server with gunicorn (or uvicorn for ASGI apps)
-CMD ["gunicorn", "-b", "0.0.0.0:5001", "server:app"]
+# Run server.py
+CMD ["python", "server.py"]
