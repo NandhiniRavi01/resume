@@ -2,10 +2,6 @@
 
 FROM python:3.9-slim
 
-# Install dependencies (including MySQL client)
-RUN apt-get update && apt-get install -y \
-    default-libmysqlclient-dev \
-    && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory
 WORKDIR /app
