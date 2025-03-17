@@ -1,27 +1,23 @@
 version: '3.8'
 
 services:
+
   # MySQL Database service
   mysql:
     build:
       context: .
       dockerfile: Dockerfile.mysql
     container_name: mysql_db
+    restart: always  # Always restart if the container stops
     environment:
       MYSQL_ROOT_PASSWORD: nandhu01
       MYSQL_DATABASE: resume_analyzer
     ports:
-      - "3307:3306"  # Map MySQL port 3306 to host port 3307
+      - "3307:3306"  # Local port 3307 -> Container port 3306
+    volumes:
+      - mysql_data:/var/lib/mysql  # Persist MySQL data outside the container
     networks:
       - backend_network
-    volumes:
-      - mysql_data:/var/lib/mysql  # Optional: Persist MySQL data between container restarts
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "--silent"]
-      interval: 30s
-      retries: 3
-      start_period: 10s
-      timeout: 10s
 
   # Backend 1 for app.py (your main backend)
   backend1:
@@ -35,6 +31,7 @@ services:
     networks:
       - backend_network
 
+  # Backend 2 for server.py (your secondary backend)
   backend2:
     build:
       context: .
@@ -44,13 +41,12 @@ services:
     depends_on:
       - mysql
     environment:
-      - MYSQL_HOST=localhost        # Use the mysql service name as host
+      - MYSQL_HOST=mysql
       - MYSQL_USER=root
       - MYSQL_PASSWORD=nandhu01
       - MYSQL_DB=resume_analyzer
     networks:
       - backend_network
-    entrypoint: ["sh", "-c", "while ! mysqladmin ping -h mysql --silent; do sleep 1; done; python server.py"]
 
   # Frontend (React app)
   frontend:
@@ -69,6 +65,7 @@ networks:
   frontend_network:
     driver: bridge
 
-# Volumes
+# Define volumes
 volumes:
   mysql_data:
+    driver: local
