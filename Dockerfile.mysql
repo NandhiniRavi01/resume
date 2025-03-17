@@ -1,13 +1,12 @@
-FROM mysql:5.7
+# Use a Debian-based image
+FROM debian:bullseye
 
-# Install MySQL client tools, including mysqladmin
-RUN apt-get update && apt-get install -y mysql-connector-python
-# Set environment variables for MySQL
+# Install MySQL client tools
+RUN apt-get update && apt-get install -y mysql-client
+
+# Set environment variables for MySQL (if needed)
 ENV MYSQL_ROOT_PASSWORD=nandhu01
 ENV MYSQL_DATABASE=resume_analyzer
 
 # Expose MySQL port
 EXPOSE 3306
-
-# Default command (MySQL will run automatically)
-CMD ["mysqld"]
