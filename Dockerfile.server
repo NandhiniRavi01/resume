@@ -10,10 +10,12 @@ COPY . .
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirments.txt
+# Copy the server.py file into the container
+COPY server.py /app/
 
-# Expose port for server.py
+# Expose the port that the application will run on
 EXPOSE 5001
 
-# Run server.py
+# Set the entry point to run the server.py when the container starts
 CMD ["python", "server.py"]
 
