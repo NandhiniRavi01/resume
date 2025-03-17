@@ -6,3 +6,4 @@ pandas
 Flask-JWT-Extended
 Werkzeug
 mysql-connector-python
+PyMySQL
