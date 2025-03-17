@@ -1,7 +1,7 @@
 FROM mysql:5.7
 
 # Install MySQL client tools, including mysqladmin
-
+RUN apt-get update && apt-get install -y mysql-connector-python
 # Set environment variables for MySQL
 ENV MYSQL_ROOT_PASSWORD=nandhu01
 ENV MYSQL_DATABASE=resume_analyzer
