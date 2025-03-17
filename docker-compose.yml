@@ -8,14 +8,15 @@ services:
       context: .
       dockerfile: Dockerfile.mysql
     container_name: mysql_db
-   
     environment:
       MYSQL_ROOT_PASSWORD: nandhu01
       MYSQL_DATABASE: resume_analyzer
     ports:
-      - "3307:3306"  # Local port 3307 -> Container port 3306
+      - "3307:3306"  # Map MySQL port 3306 to host port 3307
     networks:
       - backend_network
+    volumes:
+      - mysql_data:/var/lib/mysql  # Optional: Persist MySQL data between container restarts
 
   # Backend 1 for app.py (your main backend)
   backend1:
@@ -38,13 +39,14 @@ services:
     depends_on:
       - mysql
     environment:
-      - MYSQL_HOST=mysql        # Use the mysql service name as host
+      - MYSQL_HOST=localhost        # Use the mysql service name as host
       - MYSQL_USER=root
       - MYSQL_PASSWORD=nandhu01
       - MYSQL_DB=resume_analyzer
     networks:
       - backend_network
     entrypoint: ["sh", "-c", "while ! mysqladmin ping -h mysql --silent; do sleep 1; done; python server.py"]
+
   # Frontend (React app)
   frontend:
     build:
@@ -62,3 +64,6 @@ networks:
   frontend_network:
     driver: bridge
 
+# Volumes
+volumes:
+  mysql_data:
