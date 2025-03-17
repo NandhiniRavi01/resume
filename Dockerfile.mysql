@@ -1,5 +1,7 @@
-# Use MySQL 5.7 image
 FROM mysql:5.7
+
+# Install MySQL client tools, including mysqladmin
+RUN apt-get update && apt-get install -y mysql-client
 
 # Set environment variables for MySQL
 ENV MYSQL_ROOT_PASSWORD=nandhu01
@@ -10,4 +12,3 @@ EXPOSE 3306
 
 # Default command (MySQL will run automatically)
 CMD ["mysqld"]
-
