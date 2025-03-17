@@ -8,6 +8,7 @@ pipeline {
         DOCKER_IMAGE_BACKEND_APP = 'my-python-api-app'
         DOCKER_IMAGE_BACKEND_SERVER = 'my-python-api-server'
         DOCKER_IMAGE_MYSQL = 'my-mysql-db'
+        MYSQL_CONTAINER = 'mysql_db'
         PATH = "/usr/local/bin:${env.PATH}"
     }
 
@@ -58,35 +59,48 @@ pipeline {
                     echo 'Starting containers using Docker Compose...'
                     // Run the multi-container setup using Docker Compose
                     sh 'docker-compose up -d --build'
-                }
-            }
-        }
-
-        stage('Test Frontend') {
-            steps {
-                script {
-                    // Example test for the frontend React app
-                    echo 'Running frontend tests...'
-                    // Test if the React app is running on port 3000
-                    sh 'curl --fail http://localhost:3000 || exit 1'
-                }
-            }
-        }
-
-        stage('Test Backend') {
-            steps {
-                script {
-                    // Example test for the backend API apps
-                    echo 'Running backend tests...'
-                    sh 'curl --fail http://localhost:5001/signup || exit 1'
-                    sh 'curl --fail http://localhost:5001/login || exit 1'
-                    sh 'curl --fail http://localhost:5001/protected || exit 1'
-                    // Test the app service (running on port 5000)
-                    sh 'curl --fail http://localhost:5000/download/<filename> || exit 1'
-                    sh 'curl --fail http://localhost:5000/upload || exit 1'
-                    sh 'curl --fail http://localhost:5000 || exit 1'
-                    // Test the server service (running on port 5001)
                     
+                    // Ensure MySQL is ready before running tests
+                    echo 'Waiting for MySQL to be ready...'
+                    sh 'docker exec ${MYSQL_CONTAINER} mysqladmin ping -h mysql --silent || exit 1'
+                }
+            }
+        }
+
+        stage('Test Services') {
+            parallel {
+                stage('Test Frontend') {
+                    steps {
+                        script {
+                            echo 'Running frontend tests...'
+                            // Test if the React app is running on port 3000
+                            sh 'curl --fail http://localhost:3000 || exit 1'
+                        }
+                    }
+                }
+
+                stage('Test Backend') {
+                    steps {
+                        script {
+                            echo 'Running backend tests...'
+                            // Test backend APIs on port 5000 and 5001
+                            sh 'curl --fail http://localhost:5000 || exit 1'
+                            sh 'curl --fail http://localhost:5001 || exit 1'
+                            sh 'curl --fail http://localhost:5001/signup || exit 1'
+                            sh 'curl --fail http://localhost:5001/login || exit 1'
+                            sh 'curl --fail http://localhost:5001/protected || exit 1'
+                        }
+                    }
+                }
+
+                stage('Test MySQL') {
+                    steps {
+                        script {
+                            echo 'Testing MySQL connection...'
+                            // Test MySQL connection
+                            sh 'docker exec ${MYSQL_CONTAINER} mysql -uroot -pnandhu01 -e "SHOW DATABASES;" || exit 1'
+                        }
+                    }
                 }
             }
         }
@@ -110,4 +124,3 @@ pipeline {
         }
     }
 }
-
