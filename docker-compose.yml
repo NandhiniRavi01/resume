@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   # MySQL Database service
   mysql:
     build:
@@ -17,6 +16,12 @@ services:
       - backend_network
     volumes:
       - mysql_data:/var/lib/mysql  # Optional: Persist MySQL data between container restarts
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}", "--silent"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
+      timeout: 10s
 
   # Backend 1 for app.py (your main backend)
   backend1:
