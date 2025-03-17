@@ -1,8 +1,8 @@
 # Use a Debian-based image
-FROM debian:bullseye
+FROM python:3.9-slim
 
 # Install MySQL client tools
-RUN apt-get update && apt-get install -y mysql-client
+RUN apt-get update && apt-get install -y mysql-connector-python
 
 # Set environment variables for MySQL (if needed)
 ENV MYSQL_ROOT_PASSWORD=nandhu01
