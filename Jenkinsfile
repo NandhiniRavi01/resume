@@ -53,7 +53,8 @@ pipeline {
             }
         }
 
-         steps {
+         stage('Run Containers with Docker Compose') {
+    steps {
         script {
             echo 'Starting containers using Docker Compose...'
             // Run the multi-container setup using Docker Compose
