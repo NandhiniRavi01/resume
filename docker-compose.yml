@@ -5,7 +5,7 @@ services:
     image: my-react-app  # ✅ Ensure `image` is a string
     build:
       context: .
-      dockerfile: Dockerfile.frontend
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     depends_on:
