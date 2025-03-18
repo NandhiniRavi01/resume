@@ -11,7 +11,7 @@ jwt = JWTManager(app)
 
 # Database Connection
 db = mysql.connector.connect(
-    host="localhost",
+    host="mysql",
     user="root",           # Default XAMPP user
     password="nandhu01",           # Leave empty if no password is set
     database="resume_analyzer"
